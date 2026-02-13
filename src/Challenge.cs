@@ -32,10 +32,10 @@ namespace DesignPatternChallenge
                         Console.WriteLine("PagSeguro: Cartão inválido");
                         return;
                     }
-                    
+
                     var pagSeguroProcessor = new PagSeguroProcessor();
                     var pagSeguroResult = pagSeguroProcessor.ProcessTransaction(amount, cardNumber);
-                    
+
                     var pagSeguroLogger = new PagSeguroLogger();
                     pagSeguroLogger.Log($"Transação processada: {pagSeguroResult}");
                     break;
@@ -47,10 +47,10 @@ namespace DesignPatternChallenge
                         Console.WriteLine("MercadoPago: Cartão inválido");
                         return;
                     }
-                    
+
                     var mercadoPagoProcessor = new MercadoPagoProcessor();
                     var mercadoPagoResult = mercadoPagoProcessor.ProcessTransaction(amount, cardNumber);
-                    
+
                     var mercadoPagoLogger = new MercadoPagoLogger();
                     mercadoPagoLogger.Log($"Transação processada: {mercadoPagoResult}");
                     break;
@@ -62,10 +62,10 @@ namespace DesignPatternChallenge
                         Console.WriteLine("Stripe: Cartão inválido");
                         return;
                     }
-                    
+
                     var stripeProcessor = new StripeProcessor();
                     var stripeResult = stripeProcessor.ProcessTransaction(amount, cardNumber);
-                    
+
                     var stripeLogger = new StripeLogger();
                     stripeLogger.Log($"Transação processada: {stripeResult}");
                     break;
