@@ -107,36 +107,39 @@ public class PagamentoStripe : IPagamentos
 }
 
 
+
+
 //Creator
-public interface IPagamentoCreator
+public abstract class PagamentoCreator
 {
-    public IPagamentos CreatePagamento();
+    public abstract IPagamentos CreateDocument();
+    public void GerarPagamento(decimal amount, string cardNumber)
+    {
+        var document = CreateDocument();
+        document.ProcessPayment(amount, cardNumber);
+    }
 }
 
 //ConcreteCreator
 
-public class PagSeguroCreator : IPagamentoCreator
+public class PagSeguroCreator : PagamentoCreator
 {
-    public IPagamentos CreatePagamento()
-    {
-        return new PagamentoPagSeguro();
-    }
+    public override IPagamentos CreateDocument()
+    => new PagamentoPagSeguro();
 }
 
-public class MercadoPagoCreator : IPagamentoCreator
+public class MercadoPagoCreator : PagamentoCreator
 {
-    public IPagamentos CreatePagamento()
-    {
-        return new PagamentoMercadoPago();
-    }
+    public override IPagamentos CreateDocument()
+    => new PagamentoMercadoPago();
+    
 }
 
-public class StripeCreator : IPagamentoCreator
+public class StripeCreator : PagamentoCreator
 {
-    public IPagamentos CreatePagamento()
-    {
-        return new PagamentoStripe();
-    }
+    public override IPagamentos CreateDocument()
+   => new PagamentoStripe();
+    
 }
 
 class Program
@@ -148,15 +151,13 @@ class Program
         // Problema: Cliente precisa saber qual gateway está usando
         // e o código de processamento está todo acoplado
 
-        PagSeguroCreator pagSeguroCreator = new PagSeguroCreator();        
-        IPagamentos pagSeguroService = pagSeguroCreator.CreatePagamento();
-        pagSeguroService.ProcessPayment(150.00m, "1234567890123456");
+        PagSeguroCreator pagSeguroCreator = new PagSeguroCreator();
+        pagSeguroCreator.GerarPagamento(150.00m, "1234567890123456");
 
         Console.WriteLine();
 
         MercadoPagoCreator MercadoPagoCreator = new MercadoPagoCreator();
-        IPagamentos mercadoPagoService = MercadoPagoCreator.CreatePagamento();
-        mercadoPagoService.ProcessPayment(200.00m, "5234567890123456");
+        MercadoPagoCreator.GerarPagamento(200.00m, "5234567890123456");
 
 
         Console.WriteLine();
